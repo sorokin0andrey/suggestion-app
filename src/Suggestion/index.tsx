@@ -14,6 +14,9 @@ interface ListItem {
   name: string
 }
 
+const parseHtmlEntities = (str: string) =>
+  str.replace(/&#([0-9]{1,3});/gi, (_match, numStr) => String.fromCharCode(parseInt(numStr, 10)))
+
 export default memo(() => {
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false)
@@ -37,8 +40,8 @@ export default memo(() => {
     setDebounceTimeout(() => {
       fetch(`https://api.savetime.net/v1/client/suggest/item?q=${query}&brandId=24&shopId=1187`)
         .then((res) => res.json())
-        .then((data) => {
-          setItems(data.items)
+        .then((data: { items: ListItem[] }) => {
+          setItems(data.items.map((item) => ({ name: parseHtmlEntities(item.name) })))
           setLoading(false)
         })
     }, 1000)
