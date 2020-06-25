@@ -1,0 +1,4 @@
+export enum AppAction {
+  SET_SELECTED_ITEM = 'SET_SELECTED_ITEM',
+  SET_API_VERSION = 'SET_API_VERSION',
+}
